@@ -1,0 +1,58 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lora', serif;
+}
+.wrapper {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+header {
+  border: 1px solid lightgrey;
+  background-color: lightgrey;
+  text-align: center;
+  margin-bottom: 10px;
+}
+h1 {
+  font-size: 1.5em;
+  margin: 10px;
+}
+p {
+  margin: 10px;
+}
+.chapter {
+  text-align: center;
+  font-size: 1.5em;
+}
+.numberOfQuestion {
+  margin-top: 10px;
+  font-size: 0.8em;
+  color: grey;
+  text-align: center;
+}
+.isQuestion {
+  font-weight: bolder;
+  margin-bottom: 10px;
+}
+.x71, .x72 {
+  padding-left: 10px;
+}
+.x71:hover {
+  color: red;
+  cursor: pointer;
+}
+.x72 {
+  border: 2px solid white;
+}
+.x72:hover {
+  border-color: red;
+}
+.isTrue:hover {
+  color: green;
+  border-color: green;
+}
+footer {
+  margin-top: 30px;
+  text-align: center;
+  margin-bottom: 10px;
+}
