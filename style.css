@@ -8,6 +8,26 @@ body {
   padding-left: 10px;
   padding-right: 10px;
 }
+.isScore {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  font-size: 0.7em;
+}
+.isAnswer::before {
+  display: inline-block;
+  content: "";
+  width: 15px;
+  height:15px;
+}
+.isAnswer:first-child {
+  background-image: url("svg/correct.svg");
+  background-repeat: no-repeat;
+}
+.isAnswer:nth-child(2) {
+  background-image: url("svg/wrong.svg");
+  background-repeat: no-repeat;
+}
 header {
   border: 1px solid lightgrey;
   background-color: lightgrey;
@@ -49,16 +69,18 @@ p {
   background-color: grey;
 }
 .x71:hover {
-  color: red;
   cursor: pointer;
+}
+.x71:active {
+  color: red;
 }
 .x72 {
   border: 2px solid white;
 }
-.x72:hover {
+.x72:active {
   border-color: red;
 }
-.isTrue:hover {
+.isTrue:active {
   color: green;
   border-color: green;
 }
