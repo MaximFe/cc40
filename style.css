@@ -38,6 +38,10 @@ p {
 .x71, .x72 {
   padding-left: 10px;
 }
+.x71::before, .x72::before {
+  content: "- ";
+  color: grey;
+}
 .x71:hover {
   color: red;
   cursor: pointer;
