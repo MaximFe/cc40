@@ -36,7 +36,7 @@ header {
 }
 h1 {
   font-size: 1.5em;
-  margin: 10px;
+  margin: 20px 10px 10px 10px;
 }
 p {
   margin: 10px;
@@ -68,11 +68,8 @@ p {
   content: "";
   background-color: grey;
 }
-.x71:hover {
+.x71:hover, .x72:hover {
   cursor: pointer;
-}
-.x71:active {
-  color: red;
 }
 .x72 {
   border: 2px solid white;
@@ -81,7 +78,6 @@ p {
   border-color: red;
 }
 .isTrue:active {
-  color: green;
   border-color: green;
 }
 footer {
