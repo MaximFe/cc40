@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Lora', serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        #quiz-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; text-align: center; }
+        .question-num { color: #888; font-size: 0.9em; margin-bottom: 10px; }
+        .question-text { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; color: #333; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { padding: 12px; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: all 0.3s; background: none; font-size: 1em; text-align: left; }
+        .option-btn:hover { background-color: #f0f0f0; border-color: #bbb; }
+        .correct { background-color: #d4edda !important; border-color: #28a745 !important; color: #155724; }
+        .wrong { background-color: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+        #result-screen { display: none; }
+        img { max-width: 100%; height: auto; margin: 10px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="game-screen">
+        <div class="question-num">Вопрос <span id="current-idx">1</span> из <span id="total-questions">0</span></div>
+        <div id="question-content">
+            <div class="question-text" id="q-text">Загрузка...</div>
+            <div id="q-image"></div>
+        </div>
+        <div class="options" id="options-container"></div>
+    </div>
+    
+    <div id="result-screen">
+        <h2>Тест завершен!</h2>
+        <p>Ваш результат: <span id="score">0</span> из <span id="total-res">0</span></p>
+        <button onclick="location.reload()" style="padding: 10px 20px; cursor:pointer;">Пройти еще раз</button>
+    </div>
+</div>
+
+<script>
+    // 1. Извлекаем данные из вашего файла
+    function parseQuestions() {
+        const questions = [];
+        const qBlocks = document.querySelectorAll('.numberOfQuestion');
+        
+        qBlocks.forEach(block => {
+            const num = block.textContent;
+            const questionEl = block.nextElementSibling;
+            if (!questionEl || !questionEl.classList.contains('isQuestion')) return;
+            
+            const text = questionEl.textContent;
+            let image = null;
+            let nextEl = questionEl.nextElementSibling;
+            
+            // Проверка на наличие картинки
+            if (nextEl && nextEl.tagName === 'IMG') {
+                image = nextEl.src;
+                nextEl = nextEl.nextElementSibling;
+            }
+            
+            const options = [];
+            while (nextEl && nextEl.classList.contains('x71')) {
+                options.push({
+                    text: nextEl.textContent,
+                    isTrue: nextEl.classList.contains('isTrue')
+                });
+                nextEl = nextEl.nextElementSibling;
+            }
+            
+            questions.push({ num, text, image, options });
+        });
+        return questions;
+    }
+
+    // 2. Логика теста
+    let allQuestions = parseQuestions();
+    // Перемешиваем вопросы
+    allQuestions.sort(() => Math.random() - 0.5);
+    
+    let currentIdx = 0;
+    let score = 0;
+
+    function showQuestion() {
+        if (currentIdx >= allQuestions.length) {
+            showResults();
+            return;
+        }
+
+        const q = allQuestions[currentIdx];
+        document.getElementById('current-idx').textContent = currentIdx + 1;
+        document.getElementById('total-questions').textContent = allQuestions.length;
+        document.getElementById('q-text').textContent = q.text;
+        
+        const imgDiv = document.getElementById('q-image');
+        imgDiv.innerHTML = q.image ? `<img src="${q.image}">` : '';
+
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = opt.text;
+            btn.onclick = () => handleAnswer(btn, opt.isTrue);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(selectedBtn, isCorrect) {
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true); // Блокируем нажатия
+
+        if (isCorrect) {
+            selectedBtn.classList.add('correct');
+            score++;
+        } else {
+            selectedBtn.classList.add('wrong');
+            // Подсвечиваем правильный, чтобы пользователь учился
+            buttons.forEach((b, idx) => {
+                if (allQuestions[currentIdx].options[idx].isTrue) b.classList.add('correct');
+            });
+        }
+
+        setTimeout(() => {
+            currentIdx++;
+            showQuestion();
+        }, 1500); // Смена карточки через 1.5 секунды
+    }
+
+    function showResults() {
+        document.getElementById('game-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        document.getElementById('score').textContent = score;
+        document.getElementById('total-res').textContent = allQuestions.length;
+    }
+
+    // Запуск
+    if (allQuestions.length > 0) {
+        showQuestion();
+    } else {
+        document.getElementById('q-text').textContent = "Вопросы не найдены в файле.";
+    }
+</script>
+</body>
+</html>
